@@ -1,0 +1,2 @@
+Frontend Tools We'll Use
+CategoryToolWhyFrameworkReact + ViteFast, modernLanguageTypeScriptType safetyStylingTailwind CSSFast, utility-firstStateZustandSimple, lightweightAPI CallsAxiosEasy HTTP requestsRoutingReact RouterPage navigationIconsLucide ReactBeautiful iconsFormsReact Hook FormEasy form handlingNotificationsReact Hot ToastToast messagesTestingVitest + React Testing LibraryFast tests for Vite
