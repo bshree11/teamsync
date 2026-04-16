@@ -1,59 +1,97 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import { useAuthStore } from "./store/authStore";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Layout from './components/layout/Layout';
+import { useAuthStore } from './store/authStore';
 
 function App() {
   const { isAuthenticated } = useAuthStore();
 
   return (
     <BrowserRouter>
-      <Toaster position="bottom-right" />
-
+      <Toaster position="bottom-left" />
+      
       <Routes>
-        {/* Public routes  */}
-        <Route
-          path="/login"
-          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+        {/* Public Routes */}
+        <Route 
+          path="/login" 
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} 
+        />
+        <Route 
+          path="/register" 
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} 
         />
 
-        <Route
-          path="/register"
-          element={
-            isAuthenticated ? <Navigate to="/dashboard" /> : <Register />
-          }
-        />
-
-        {/* Dashboard - temporary placeholder */}
-        <Route
-          path="/dashboard"
+        {/* Protected Routes - with Layout */}
+        <Route 
+          path="/dashboard" 
           element={
             isAuthenticated ? (
-              <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                  <h1 className="text-3xl font-bold text-gray-800">
-                    Welcome to Dashboard!
-                  </h1>
-                  <p className="text-gray-600 mt-2">You are logged in.</p>
-                  <button
-                    onClick={() => useAuthStore.getState().logout()}
-                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
+              <Layout>
+                <Dashboard />
+              </Layout>
             ) : (
               <Navigate to="/login" />
             )
-          }
+          } 
         />
 
-        {/* Default Route - redirect to login or dashboard */}
-        <Route
-          path="*"
-          element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />}
+        {/* Placeholder routes for other pages */}
+        <Route 
+          path="/teams" 
+          element={
+            isAuthenticated ? (
+              <Layout>
+                <div className="text-2xl font-bold">Teams Page (Coming Day 10)</div>
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          } 
+        />
+        <Route 
+          path="/projects" 
+          element={
+            isAuthenticated ? (
+              <Layout>
+                <div className="text-2xl font-bold">Projects Page (Coming Day 11)</div>
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          } 
+        />
+        <Route 
+          path="/tasks" 
+          element={
+            isAuthenticated ? (
+              <Layout>
+                <div className="text-2xl font-bold">Tasks Page (Coming Day 12)</div>
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            isAuthenticated ? (
+              <Layout>
+                <div className="text-2xl font-bold">Profile Page (Coming Day 13)</div>
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          } 
+        />
+
+        {/* Default Route */}
+        <Route 
+          path="*" 
+          element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} 
         />
       </Routes>
     </BrowserRouter>
