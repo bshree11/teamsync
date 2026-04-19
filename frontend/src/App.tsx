@@ -7,6 +7,8 @@ import Layout from "./components/layout/Layout";
 import { useAuthStore } from "./store/authStore";
 import Teams from "./pages/Teams";
 import TeamDetail from "./pages/TeamDetail";
+import Projects from "./pages/Projects";
+import ProjectDetail from "./pages/ProjectDetail";
 
 function App() {
   const { isAuthenticated } = useAuthStore();
@@ -75,9 +77,19 @@ function App() {
           element={
             isAuthenticated ? (
               <Layout>
-                <div className="text-2xl font-bold">
-                  Projects Page (Coming Day 11)
-                </div>
+                <Projects />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/projects/:id"
+          element={
+            isAuthenticated ? (
+              <Layout>
+                <ProjectDetail />
               </Layout>
             ) : (
               <Navigate to="/login" />
