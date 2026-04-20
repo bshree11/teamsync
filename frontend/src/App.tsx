@@ -9,6 +9,7 @@ import Teams from "./pages/Teams";
 import TeamDetail from "./pages/TeamDetail";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
+import Tasks from "./pages/Tasks";
 
 function App() {
   const { isAuthenticated } = useAuthStore();
@@ -101,9 +102,7 @@ function App() {
           element={
             isAuthenticated ? (
               <Layout>
-                <div className="text-2xl font-bold">
-                  Tasks Page (Coming Day 12)
-                </div>
+                <Tasks />
               </Layout>
             ) : (
               <Navigate to="/login" />
