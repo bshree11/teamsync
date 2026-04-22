@@ -1,94 +1,77 @@
-/* AI SERVICE
-What: generates summeries from tasks/projects
-Why: gives users quick insights about their work
-*/
+/**
+ * AI SERVICE
+ * 
+ * What: Connects to backend AI endpoint
+ * Why: Get real AI-powered summaries
+ */
 
-import type {Task} from '../types';
+import api from './api';
+import type { Task } from '../types';
 
-export interface AISummary{
-    totalTasks: number;
-    todoCount: number;
-    inProgressCount: number;
-    doneCount: number;
-    highPriorityTasks: Task[];
-    completionRate: number;
-    suggestion: string;
+export interface AISummary {
+  totalTasks: number;
+  todoCount: number;
+  inProgressCount: number;
+  doneCount: number;
+  highPriorityTasks: string[];
+  completionRate: number;
+  suggestion: string;
 }
 
-//GENERATE SUMMARY - analyzes tasks and return insights
-
-export const generateSummary = (tasks: Task[]): AISummary =>{
-    const todoCount = tasks.filter(t => t.status === 'todo').length;
-    const inProgressCount = tasks.filter(t => t.status === 'in-progress').length;
-    const doneCount = tasks.filter(t => t.status === 'done').length;
-    const totalTasks = tasks.length;
-
-    //Find high priority tasks that, aren't done
-    const highPriorityTasks = tasks.filter(
-        t => t.priority === 'high' && t.status !== 'done'
+/**
+ * GENERATE SUMMARY
+ * Sends tasks to backend, gets AI summary
+ */
+export const generateSummary = async (tasks: Task[]): Promise<AISummary> => {
+  try {
+    const response = await api.post<{ success: boolean; summary: AISummary }>(
+      '/ai/summary',
+      { tasks }
     );
-
-    //calculate completion rate
-    const completionRate = totalTasks>0
-    ? Math.round((doneCount / totalTasks) * 100): 0;
-
-    //generate smart suggestion
-    const suggestion = generateSuggestion(
-        todoCount,
-        inProgressCount,
-        doneCount,
-        highPriorityTasks
-    );
-
-    return{
-        totalTasks,
-        todoCount,
-        inProgressCount,
-        doneCount,
-        highPriorityTasks,
-        completionRate,
-        suggestion
-    };
+    return response.data.summary;
+  } catch (error) {
+    // Fallback if API fails
+    return generateLocalSummary(tasks);
+  }
 };
 
-//Generate suggestion - creates helpful advice based on task status
+/**
+ * LOCAL FALLBACK
+ * If API fails, generate summary locally
+ */
+const generateLocalSummary = (tasks: Task[]): AISummary => {
+  const todoCount = tasks.filter(t => t.status === 'todo').length;
+  const inProgressCount = tasks.filter(t => t.status === 'in-progress').length;
+  const doneCount = tasks.filter(t => t.status === 'done').length;
+  const totalTasks = tasks.length;
 
-const generateSuggestion =(
-    todo: number,
-    inProgress: number,
-    done: number,
-    highPriority: Task[]
-): string => {
-  // No tasks
-  if (todo + inProgress + done === 0) {
-    return "🎯 Start by creating your first task!";
+  const highPriorityTasks = tasks
+    .filter(t => t.priority === 'high' && t.status !== 'done')
+    .map(t => t.title);
+
+  const completionRate = totalTasks > 0
+    ? Math.round((doneCount / totalTasks) * 100)
+    : 0;
+
+  let suggestion = '✨ Ready to be productive!';
+  
+  if (totalTasks === 0) {
+    suggestion = '🎯 Start by creating your first task!';
+  } else if (todoCount === 0 && inProgressCount === 0) {
+    suggestion = '🎉 Amazing! All tasks completed!';
+  } else if (highPriorityTasks.length > 0) {
+    suggestion = `🔴 Focus on "${highPriorityTasks[0]}" first!`;
+  } else if (inProgressCount > 3) {
+    suggestion = '⚠️ Too many tasks in progress. Finish some first!';
   }
 
-  // All done
-  if (todo === 0 && inProgress === 0 && done > 0) {
-    return "🎉 Amazing! All tasks completed. Time to plan next steps!";
-  }
-
-  // High priority pending
-  if (highPriority.length > 0) {
-    return `🔴 Focus on "${highPriority[0].title}" - it's high priority!`;
-  }
-
-  // Too many in progress
-  if (inProgress > 3) {
-    return "⚠️ You have many tasks in progress. Try finishing some before starting new ones.";
-  }
-
-  // Many todos
-  if (todo > 5) {
-    return "📋 You have several tasks waiting. Pick the most important one to start!";
-  }
-
-  // Good progress
-  if (inProgress > 0) {
-    return "💪 Good progress! Keep working on your current tasks.";
-  }
-
-  // Default
-  return "✨ Ready to be productive? Pick a task and get started!";
+  return {
+    totalTasks,
+    todoCount,
+    inProgressCount,
+    doneCount,
+    highPriorityTasks,
+    completionRate,
+    suggestion
+  };
 };

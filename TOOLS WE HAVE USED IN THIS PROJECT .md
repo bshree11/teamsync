@@ -1,71 +1,91 @@
+# Tools & Technologies
+
+This document lists all tools, libraries, and technologies used to build TeamSync.
+
+## Backend
+
+**Runtime & Framework**
+- Node.js - JavaScript runtime
+- Express.js - Web framework for building APIs
+- TypeScript - Type-Safe JavaScript
+
+**Database**
+- MongoDB - NOSQL database
+- Mongoose - MongoDB object modeling
+
+**Authentication**
+- JSON Web Tokens (JWT) - Secure token-based auth
+- bcryptjs - Password hashing
+
+**AI Integration**
+- Hugging Face Inference API - AI -powered task summaries
+- Axios - HTTP client for API calls
+
+**Real-time**
+- Socket.io - WebSocket for real-time updates
+
+**Testing**
+- Jest - Testing framework
+- Supertest - HTTP testing
+
+**Other Additional Resources**
+- dotenv - Environment variables
+- cors - Cross-Origin resource sharing
+- express-validator - Input validation
 
 
-Frontend 7-Day Plan 📋
+## Frontend
 
-Day 8: Setup + Auth Pages
-├── Create folder structure
-├── Create helper files (api.ts, types, store)
-├── Login page
-├── Register page
-└── Connect to backend auth API
+**Core**
+- React 18 - UI library
+- Typescript - Type-safe Javascript
+- Vite - Build tool and dev server
 
-Day 9: Layout + Dashboard
-├── Navbar component
-├── Sidebar component
-├── Dashboard page (home after login)
-└── Protected routes (redirect if not logged in)
+**Styling**
+- Tailwind CSS - Utility-first CSS framework
 
-Day 10: Teams Feature
-├── Teams list page
-├── Create team modal
-├── Team detail page
-├── Add/remove members
+**State Management**
+Zustand - Lightweight state management
 
-Day 11: Projects Feature
-├── Projects list page
-├── Create project modal
-├── Project detail page
-└── Project settings
+**Routing**
+-React Router - Client-side routing
 
-Day 12: Tasks Feature
-├── Tasks list page
-├── Create task modal
-├── Task card component
-├── Kanban board view (todo → in-progress → done)
+**HTTP Client**
+- Axios - API requests with interceptors
 
-Day 13: AI + Polish
-├── AI summary button (calls your AI endpoint)
-├── Profile page
-├── Notifications dropdown
-├── UI polish & fixes
+**Notifications**
+- React Hot Toast - Toast notifications
 
-Day 14: Testing + Build
-├── Test all features manually
-├── Fix bugs
-├── npm run build (production build)
-└── Ready for deployment!
+**Testing**
+- Vitest - Testing framework
+- React Testing Library - Component testing
 
-ALL TOOLS USED IN THIS PROJECT : 
 
-Backend:
-├── Node.js
-├── Express
-├── TypeScript
-├── MongoDB / Mongoose
-├── JWT (jsonwebtoken)
-├── Bcrypt
-├── Jest
-├── Supertest
-├── Socket.io
-├── Hugging Face AI
-Frontend:
-├── React
-├── Vite
-├── TypeScript
-├── Tailwind CSS
-├── Axios
-├── React Router
-├── Zustand
-├── React Hook Form
-├── React Hot Toast
-├── Lucide React (icons)
+## Development Tools
+
+**Code Editor**
+- Visual Studio Code
+
+**Version Control**
+- Git
+- GitHub
+
+**API Testing**
+- Postman
+
+**Package Manager**
+- npm
+
+## Deployment
+ 
+**Backend Hosting**
+- Render - Node.js hosting
+
+**Frontend Hosting**
+- Vercel - React app hosting
+
+**Database Hosting**
+- MongoDB Atlas - Cloud Database
+
+
+

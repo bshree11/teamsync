@@ -1,13 +1,6 @@
-/**
- * TEAM DETAIL PAGE
- * 
- * What: Shows single team with members
- * URL: /teams/:id
- */
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getTeam, deleteTeam } from '../services/teamService';
+import { getTeam, deleteTeam, addMember } from '../services/teamService';
 import type { Team } from '../types';
 import toast from 'react-hot-toast';
 
@@ -16,6 +9,9 @@ function TeamDetail() {
   const navigate = useNavigate();
   const [team, setTeam] = useState<Team | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showInvite, setShowInvite] = useState(false);
+  const [email, setEmail] = useState('');
+  const [inviting, setInviting] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -48,6 +44,28 @@ function TeamDetail() {
     }
   };
 
+  const handleInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email.trim()) {
+      toast.error('Email is required');
+      return;
+    }
+
+    try {
+      setInviting(true);
+      const updatedTeam = await addMember(id!, email.trim());
+      setTeam(updatedTeam);
+      setEmail('');
+      setShowInvite(false);
+      toast.success('Member added!');
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Failed to add member');
+    } finally {
+      setInviting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -69,15 +87,13 @@ function TeamDetail() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          {/* Back Button */}
           <button
             onClick={() => navigate('/teams')}
             className="text-gray-500 hover:text-gray-700"
           >
             ← Back
           </button>
-          
-          {/* Team Icon & Name */}
+
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-xl">
               {team.name.charAt(0).toUpperCase()}
@@ -89,7 +105,6 @@ function TeamDetail() {
           </div>
         </div>
 
-        {/* Delete Button */}
         <button
           onClick={handleDelete}
           className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600"
@@ -100,10 +115,49 @@ function TeamDetail() {
 
       {/* Members Section */}
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          Members ({team.members?.length || 0})
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Members ({team.members?.length || 0})
+          </h2>
+          <button
+            onClick={() => setShowInvite(!showInvite)}
+            className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600"
+          >
+            + Add Member
+          </button>
+        </div>
 
+        {/* Invite Form */}
+        {showInvite && (
+          <form onSubmit={handleInvite} className="mb-4 p-4 bg-gray-50 rounded-lg">
+            <label className="block text-gray-700 text-sm mb-1">Member Email</label>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter email address"
+              />
+              <button
+                type="submit"
+                disabled={inviting}
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-green-300"
+              >
+                {inviting ? 'Adding...' : 'Add'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowInvite(false)}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Members List */}
         {team.members && team.members.length > 0 ? (
           <div className="space-y-3">
             {team.members.map((member) => (

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../services/authService';
 import { useAuthStore } from '../store/authStore';
+import { connectSocket } from '../services/socket';
 
 function Register(){
     const [name, setName] = useState('');
@@ -12,36 +13,44 @@ function Register(){
     const navigate = useNavigate();
     const { setUser } = useAuthStore();
 
-    const handleRegister = async (e: React.FormEvent) =>{
-        e.preventDefault();
-        setError('');
+  const handleRegister = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError('');
 
-        if(!name || !email || !password){
-            setError('Please fill in all fields');
-            return;
-        }
+  if (!name || !email || !password) {
+    setError('Please fill in all fields');
+    return;
+  }
 
-        if(password.length<6){
-            setError('Password must be at least 6 characters');
-            return;
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    setError('Please enter a valid email (example@domain.com)');
+    return;
+  }
 
-        }
+  if (password.length < 6) {
+    setError('Password must be at least 6 characters');
+    return;
+  }
 
-        try{
-            setLoading(true);
-            const result = await register(name, email, password);
+  try {
+    setLoading(true);
+    // Convert email to lowercase before sending
+    const result = await register(name, email.toLowerCase(), password);
 
-            if(result.success){
-                setUser(result.user, result.token);
-                navigate('/dashboard');
-            }
-        }catch(err: any){
-            setError(err.response?.data?.error || 'Registration failed');
+    if (result.success) {
+      setUser(result.user, result.token);
+      connectSocket(result.user.id);
+      navigate('/dashboard');
+    }
+  } catch (err: any) {
+    setError(err.response?.data?.error || 'Registration failed');
+  } finally {
+    setLoading(false);
+  }
+};
 
-        }finally{
-            setLoading(false);
-        }
-    };
     return(
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -111,8 +120,3 @@ function Register(){
 }
 
 export default Register;
-
-
-
-
-    

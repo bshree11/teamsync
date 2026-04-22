@@ -2,6 +2,7 @@ import { useState } from "react";
 import {useNavigate, Link} from 'react-router-dom';
 import { login } from '../services/authService';
 import { useAuthStore } from "../store/authStore";
+import { connectSocket } from '../services/socket';
 
 function Login(){
     const [email, setEmail] = useState('');
@@ -12,39 +13,30 @@ function Login(){
     const { setUser } = useAuthStore();
 
 
-//Handle login - runs when user clicks login button 
-const handleLogin = async (e: React.FormEvent) =>{
-    // prevents page refresh 
-    e.preventDefault();
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError('');
 
-    //clear previous errors
-    setError('');
+  if (!email || !password) {
+    setError('Please fill in all fields');
+    return;
+  }
 
-    //validate inputs
-    if(!email || !password){
-        setError('Please fill in all fields');
-        return ;
+  try {
+    setLoading(true);
+    // Convert email to lowercase before sending
+    const result = await login(email.toLowerCase(), password);
+
+    if (result.success) {
+      setUser(result.user, result.token);
+      connectSocket(result.user.id);
+      navigate('/dashboard');
     }
-    try{
-        //show loading
-        setLoading(true);
-        
-        //call login API
-        const result = await login(email, password);
-
-        //if successfull 
-        if(result.success){
-            setUser(result.user, result.token);
-
-            //redirect to dashboard
-            navigate('/dashboard')
-        }
-    }catch(err: any){
-        //show error msg
-        setError(err.response?.data?.error || 'Login Failed');
-    }finally{
-        setLoading(false);
-    }
+  } catch (err: any) {
+    setError(err.response?.data?.error || 'Login Failed');
+  } finally {
+    setLoading(false);
+  }
 };
 
 return(

@@ -1,208 +1,684 @@
+# TeamSync API Documentation
 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OWQ4ODA4ODZkNmQwNGJjZmM0Y2ZjYjEiLCJlbWFpbCI6ImRhaXN5QHRlc3QuY29tIiwiaWF0IjoxNzc2MTMzMDI5LCJleHAiOjE3NzY3Mzc4Mjl9.0QZnzFRBbdMcNDdtHGUGRbybxQ3Gsswb0JE_fUe23GU
-
-
-
-# TeamSync API
-
-Base URL: `http://localhost:5000`
+Base URL: `http://localhost:5000/api`
 
 ---
 
 ## Authentication
 
-Protected routes need this header:
+All protected routes require a JWT token in the Authorization header:
 Authorization: Bearer your-token-here
 
 ---
 
-## Auth
+## Auth Endpoints
 
-**Register**
+### Register User
 POST /api/auth/register
-Body: { "email": "...", "password": "...", "name": "..." }
-Returns: { success, token, user }
 
-**Login**
+Request Body:
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "user": {
+    "id": "user_id",
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "token": "jwt_token_here"
+}
+```
+
+### Login User
 POST /api/auth/login
-Body: { "email": "...", "password": "..." }
-Returns: { success, token, user }
 
-**Get Current User** (Auth required)
+Request Body:
+```json
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "user": {
+    "id": "user_id",
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "token": "jwt_token_here"
+}
+```
+
+### Get Current User (Protected)
 GET /api/auth/me
-Returns: { success, user }
+
+Response:
+```json
+{
+  "success": true,
+  "user": {
+    "id": "user_id",
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+}
+```
 
 ---
 
-## Users (All require Auth)
+## User Endpoints (All Protected)
 
-**Get My Profile**
+### Get My Profile
 GET /api/users/profile
-Returns: { success, user }
 
-**Update My Profile**
+Response:
+```json
+{
+  "success": true,
+  "user": {
+    "id": "user_id",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "avatar": "avatar_url"
+  }
+}
+```
+
+### Update My Profile
 PUT /api/users/profile
-Body: { "name": "New Name", "avatar": "url" }
-Returns: { success, user }
 
-**Change Password**
+Request Body:
+```json
+{
+  "name": "New Name",
+  "avatar": "new_avatar_url"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "user": {
+    "id": "user_id",
+    "name": "New Name",
+    "email": "john@example.com"
+  }
+}
+```
+
+### Change Password
 PUT /api/users/password
-Body: { "currentPassword": "...", "newPassword": "..." }
-Returns: { success, message }
 
-**List All Users**
+Request Body:
+```json
+{
+  "currentPassword": "oldpassword",
+  "newPassword": "newpassword123"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "message": "Password updated"
+}
+```
+
+### List All Users
 GET /api/users
-Returns: { success, users }
+
+Response:
+```json
+{
+  "success": true,
+  "users": [
+    { "id": "user_id", "name": "John Doe", "email": "john@example.com" }
+  ]
+}
+```
 
 ---
 
-## Teams (All require Auth)
+## Team Endpoints (All Protected)
 
-**Create Team**
+### Create Team
 POST /api/teams
-Body: { "name": "Team Name", "description": "Optional" }
-Returns: { success, team }
 
-**Get My Teams**
+Request Body:
+```json
+{
+  "name": "Backend Team",
+  "description": "Backend developers"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "team": {
+    "_id": "team_id",
+    "name": "Backend Team",
+    "description": "Backend developers",
+    "owner": "user_id",
+    "members": []
+  }
+}
+```
+
+### Get My Teams
 GET /api/teams
-Returns: { success, teams }
 
-**Get One Team**
+Response:
+```json
+{
+  "success": true,
+  "teams": [
+    {
+      "_id": "team_id",
+      "name": "Backend Team",
+      "description": "Backend developers",
+      "owner": "user_id",
+      "members": [
+        {
+          "user": { "name": "John", "email": "john@example.com" },
+          "role": "admin"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Get Single Team
 GET /api/teams/:id
-Returns: { success, team }
 
-**Update Team** (Owner/Admin only)
+Response:
+```json
+{
+  "success": true,
+  "team": {
+    "_id": "team_id",
+    "name": "Backend Team",
+    "description": "Backend developers",
+    "owner": "user_id",
+    "members": []
+  }
+}
+```
+
+### Update Team (Owner/Admin only)
 PUT /api/teams/:id
-Body: { "name": "New Name", "description": "New desc" }
-Returns: { success, team }
 
-**Delete Team** (Owner only)
+Request Body:
+```json
+{
+  "name": "Updated Team Name",
+  "description": "Updated description"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "team": {
+    "_id": "team_id",
+    "name": "Updated Team Name",
+    "description": "Updated description"
+  }
+}
+```
+
+### Delete Team (Owner only)
 DELETE /api/teams/:id
-Returns: { success, message }
 
-**Add Member** (Owner/Admin only)
+Response:
+```json
+{
+  "success": true,
+  "message": "Team deleted"
+}
+```
+
+### Add Member to Team (Owner/Admin only)
 POST /api/teams/:id/members
-Body: { "memberId": "user-id", "role": "member" }
-Returns: { success, team }
 
-**Remove Member** (Owner/Admin only)
+Request Body:
+```json
+{
+  "email": "newmember@example.com",
+  "role": "member"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "team": {
+    "_id": "team_id",
+    "name": "Backend Team",
+    "members": [
+      { "user": { "name": "New Member" }, "role": "member" }
+    ]
+  }
+}
+```
+
+Note: This triggers a real-time notification to the added member via WebSocket.
+
+### Remove Member from Team (Owner/Admin only)
 DELETE /api/teams/:id/members/:memberId
-Returns: { success, message }
+
+Response:
+```json
+{
+  "success": true,
+  "message": "Member removed"
+}
+```
 
 ---
 
-## Projects (All require Auth)
+## Project Endpoints (All Protected)
 
-**Create Project**
+### Create Project
 POST /api/projects
-Body: { "name": "...", "description": "...", "teamId": "..." }
-Returns: { success, project }
 
-**Get My Projects**
+Request Body:
+```json
+{
+  "name": "Website Redesign",
+  "description": "Redesign company website",
+  "teamId": "team_id"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "project": {
+    "_id": "project_id",
+    "name": "Website Redesign",
+    "description": "Redesign company website",
+    "team": "team_id",
+    "status": "planning"
+  }
+}
+```
+
+### Get My Projects
 GET /api/projects
-Returns: { success, projects }
 
-**Get One Project**
+Response:
+```json
+{
+  "success": true,
+  "projects": [
+    {
+      "_id": "project_id",
+      "name": "Website Redesign",
+      "status": "active",
+      "team": { "name": "Backend Team" }
+    }
+  ]
+}
+```
+
+### Get Single Project
 GET /api/projects/:id
-Returns: { success, project }
 
-**Update Project**
+Response:
+```json
+{
+  "success": true,
+  "project": {
+    "_id": "project_id",
+    "name": "Website Redesign",
+    "description": "Redesign company website",
+    "status": "active"
+  }
+}
+```
+
+### Update Project
 PUT /api/projects/:id
-Body: { "name": "...", "description": "...", "status": "active" }
-Returns: { success, project }
 
-**Delete Project**
+Request Body:
+```json
+{
+  "name": "Updated Project Name",
+  "status": "in-progress"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "project": {
+    "_id": "project_id",
+    "name": "Updated Project Name",
+    "status": "in-progress"
+  }
+}
+```
+
+### Delete Project
 DELETE /api/projects/:id
-Returns: { success, message }
+
+Response:
+```json
+{
+  "success": true,
+  "message": "Project deleted"
+}
+```
 
 ---
 
-## Tasks (All require Auth)
+## Task Endpoints (All Protected)
 
-**Create Task**
+### Create Task
 POST /api/tasks
-Body: { "title": "...", "projectId": "...", "priority": "high", "assignedTo": "userId" }
-Returns: { success, task }
 
-**Get Tasks (with filters)**
+Request Body:
+```json
+{
+  "title": "Design homepage",
+  "description": "Create homepage mockups",
+  "projectId": "project_id",
+  "priority": "high",
+  "status": "todo",
+  "dueDate": "2026-04-30"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "task": {
+    "_id": "task_id",
+    "title": "Design homepage",
+    "status": "todo",
+    "priority": "high"
+  }
+}
+```
+
+### Get Tasks (with optional filters)
 GET /api/tasks
 GET /api/tasks?status=todo
 GET /api/tasks?priority=high
-GET /api/tasks?projectId=...
-Returns: { success, tasks }
+GET /api/tasks?projectId=project_id
 
-**Get One Task**
+Response:
+```json
+{
+  "success": true,
+  "tasks": [
+    {
+      "_id": "task_id",
+      "title": "Design homepage",
+      "status": "todo",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+### Get Single Task
 GET /api/tasks/:id
-Returns: { success, task }
 
-**Update Task**
+Response:
+```json
+{
+  "success": true,
+  "task": {
+    "_id": "task_id",
+    "title": "Design homepage",
+    "description": "Create homepage mockups",
+    "status": "todo",
+    "priority": "high"
+  }
+}
+```
+
+### Update Task
 PUT /api/tasks/:id
-Body: { "status": "in-progress", "priority": "low" }
-Returns: { success, task }
 
-**Delete Task**
+Request Body:
+```json
+{
+  "title": "Updated title",
+  "status": "in-progress",
+  "priority": "medium"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "task": {
+    "_id": "task_id",
+    "title": "Updated title",
+    "status": "in-progress"
+  }
+}
+```
+
+### Delete Task
 DELETE /api/tasks/:id
-Returns: { success, message }
+
+Response:
+```json
+{
+  "success": true,
+  "message": "Task deleted"
+}
+```
 
 ---
 
-## Activity (All require Auth)
+## Activity Endpoints (All Protected)
 
-**Get Activity Feed**
+### Get Activity Feed
 GET /api/activity
-Returns: { success, activities }
 
-**Get Project Activity**
+Response:
+```json
+{
+  "success": true,
+  "activities": [
+    {
+      "_id": "activity_id",
+      "action": "created task",
+      "user": { "name": "John Doe" },
+      "createdAt": "2026-04-21T10:00:00Z"
+    }
+  ]
+}
+```
+
+### Get Project Activity
 GET /api/activity/project/:id
-Returns: { success, activities }
+
+Response:
+```json
+{
+  "success": true,
+  "activities": [
+    {
+      "_id": "activity_id",
+      "action": "updated task status",
+      "user": { "name": "John Doe" }
+    }
+  ]
+}
+```
 
 ---
 
-## Notifications (All require Auth)
+## Notification Endpoints (All Protected)
 
-**Get My Notifications**
+### Get My Notifications
 GET /api/notifications
-Returns: { success, notifications }
 
-**Mark One as Read**
+Response:
+```json
+{
+  "success": true,
+  "notifications": [
+    {
+      "_id": "notification_id",
+      "message": "You were added to Backend Team",
+      "read": false,
+      "createdAt": "2026-04-21T10:00:00Z"
+    }
+  ]
+}
+```
+
+### Mark Notification as Read
 PUT /api/notifications/:id
-Returns: { success, notification }
 
-**Mark All as Read**
+Response:
+```json
+{
+  "success": true,
+  "notification": {
+    "_id": "notification_id",
+    "read": true
+  }
+}
+```
+
+### Mark All as Read
 PUT /api/notifications/read-all
-Returns: { success, message }
 
-**Delete Notification**
+Response:
+```json
+{
+  "success": true,
+  "message": "All notifications marked as read"
+}
+```
+
+### Delete Notification
 DELETE /api/notifications/:id
-Returns: { success, message }
+
+Response:
+```json
+{
+  "success": true,
+  "message": "Notification deleted"
+}
+```
 
 ---
 
-## AI (All require Auth)
+## AI Endpoints (All Protected)
 
-**Get Project Task Summary**
-GET /api/ai/summary/:projectId
-Returns: { success, project, taskCount, summary }
+### Generate Task Summary
+POST /api/ai/summary
 
-Note: Uses Google Gemini AI to generate task summaries.
+Request Body:
+```json
+{
+  "tasks": [
+    { "title": "Task 1", "status": "todo", "priority": "high" },
+    { "title": "Task 2", "status": "done", "priority": "low" },
+    { "title": "Task 3", "status": "in-progress", "priority": "medium" }
+  ]
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "summary": {
+    "totalTasks": 3,
+    "todoCount": 1,
+    "inProgressCount": 1,
+    "doneCount": 1,
+    "completionRate": 33,
+    "highPriorityTasks": ["Task 1"],
+    "suggestion": "🔴 Focus on \"Task 1\" - it's high priority!"
+  }
+}
+```
+
+Note: Uses Hugging Face AI for suggestions with smart local fallback for reliability.
+
+---
+
+## WebSocket (Real-time Updates)
+
+### Connection
+
+```javascript
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000');
+
+// Join as user after login
+socket.emit('join', userId);
+
+// Join a team room
+socket.emit('join_team', teamId);
+```
+
+### Events
+
+**team_invite** - Received when you are added to a team
+
+```javascript
+socket.on('team_invite', (data) => {
+  console.log(data.message);    // "You were added to a team!"
+  console.log(data.teamId);     // Team ID
+  console.log(data.teamName);   // Team name
+});
+```
 
 ---
 
 ## Roles
 
-- **owner** - Full control (created the team)
-- **admin** - Add/remove members, update team
-- **member** - View team and projects
+**owner** - Created the team. Full control over team settings, members, and deletion.
+
+**admin** - Can add/remove members and update team settings.
+
+**member** - Can view team, projects, and tasks. Can create and update tasks.
 
 ---
 
-## Error Codes
+## Error Responses
 
-- **200** - Success
-- **201** - Created
-- **400** - Bad input
-- **401** - Not logged in
-- **403** - Not authorized
-- **404** - Not found
-- **429** - Too many requests (AI quota)
-- **500** - Server error
+All errors follow this format:
+
+```json
+{
+  "success": false,
+  "error": "Error message here"
+}
+```

@@ -1,180 +1,181 @@
-# User Guide - TeamSync 
+# User Guide - TeamSync
 
-How to use for users---
+How to use TeamSync for managing your team's tasks.
+
+---
 
 ## Getting Started
 
 ### 1. Create Account
-1. Go to website
-2. Click "Sign Up"
-3. Enter email, password, name
-4. Click "Create Account"
-5. Auto-logged in ✅
+1. Go to the app
+2. Click "Register here"
+3. Enter name, email, password
+4. Click "Register"
+5. You're logged in!
 
-### 2. Create Team
-1. Go to "Teams" page
+### 2. Login
+1. Go to login page
+2. Enter email and password
+3. Click "Login"
+4. You're in the dashboard!
+
+---
+
+## Dashboard
+
+When you login, you see the Dashboard with:
+
+- **AI Summary** - Shows your task stats and smart suggestions
+- **Total Tasks** - How many tasks you have
+- **Completion Rate** - Percentage of tasks done
+- **High Priority** - Tasks that need attention first
+- **Quick Actions** - Fast links to Teams, Projects, Tasks
+
+---
+
+## Teams
+
+### Create a Team
+1. Go to "Teams" in sidebar
 2. Click "Create Team"
-3. Enter team name
+3. Enter team name and description
 4. Click "Create"
-5. Team created! ✅
 
-### 3. Invite Members
-1. Open team
-2. Click "Add Members"
+### View Team
+1. Click on any team
+2. See team details and members
+
+### Add Member to Team
+1. Open a team
+2. Click "Add Member"
 3. Enter member's email
-4. Set role: Admin or Member
-5. Click "Invite"
-6. Member gets notification ✅
+4. Click "Add"
+5. Member gets real-time notification!
 
-### 4. Create Project
-1. Go to "Projects"
-2. Click "New Project"
-3. Enter name, description
-4. Select team
+### Delete Team
+1. Open the team
+2. Click "Delete Team"
+3. Confirm deletion
+
+---
+
+## Projects
+
+### Create a Project
+1. Go to "Projects" in sidebar
+2. Click "Create Project"
+3. Enter name and description
+4. Select a team
 5. Click "Create"
-6. Project created! ✅
 
-### 5. Add Tasks (2 Ways)
+### View Project
+1. Click on any project
+2. See project details
 
-#### Way 1: Manual
+### Change Project Status
 1. Open project
-2. Click "Add Task"
-3. Fill in: Title, Description, Priority, Deadline
-4. Assign to team member
-5. Click "Create" ✅
-
-#### Way 2: AI Breakdown
-1. Click "AI Breakdown"
-2. Type: "Build entire website"
-3. AI generates 5-10 tasks automatically
-4. Review tasks
-5. Click "Create All" ✅
-
-### 6. Update Task Status
-1. Open task
 2. Click status dropdown
-3. Select: Todo → In Progress → Done
-4. All team members see update INSTANTLY! ⚡
+3. Select: Planning, Active, or Completed
 
-### 7. View Activity Log
-1. Go to "Activity" page
-2. See timeline of everything:
-   - Who created what task
-   - Who completed what
-   - Who joined team
-   - AI summaries
+### Delete Project
+1. Open the project
+2. Click "Delete Project"
+3. Confirm deletion
 
-### 8. Get Notifications
-1. Look at Navbar (bell icon)
-2. See count of notifications
-3. Click to see:
-   - "John assigned you a task"
-   - "Sarah completed a task"
-   - "New member joined team"
+---
 
-### 9. Change Settings
-1. Go to "Settings"
-2. Change password
-3. Turn notifications on/off
-4. Switch theme (dark/light)
-5. Update profile picture
+## Tasks (Kanban Board)
 
-## Features
+### View Tasks
+1. Go to "Tasks" in sidebar
+2. See three columns: To Do, In Progress, Done
 
-### ⚡ Real-time Updates
-- Make a change → Everyone sees it instantly
-- No page refresh needed!
-- Works via WebSockets
+### Create a Task
+1. Click "Add Task"
+2. Enter title and description
+3. Select project
+4. Set priority: Low, Medium, or High
+5. Click "Create"
 
-### 🤖 AI Task Breakdown
-- Say: "Build website"
-- AI breaks into: Setup, Design, Code, Test, Deploy
-- Create all at once!
+### Move Task Between Columns
+1. Find your task
+2. Click the move arrows
+3. Task moves to next column
+4. Changes save automatically!
 
-### 👥 Team Collaboration
-- Assign tasks to teammates
-- See who's doing what
-- Work together in real-time
+### Task Priorities
+- **High** - Red badge, do these first
+- **Medium** - Yellow badge, important but not urgent
+- **Low** - Green badge, can wait
 
-### 📊 Activity Log
-- See everything that happened
-- When tasks were created/updated
-- Who did what and when
+---
 
-### 🔐 Secure
-- Password encrypted
-- JWT authentication
-- Only see your team's data
+## Profile
 
-## Tips
+### View Profile
+1. Go to "Profile" in sidebar
+2. See your name and email
+3. See your avatar
 
-✅ Use AI Breakdown for big tasks
-✅ Assign tasks to keep everyone accountable
-✅ Check Activity Log to stay informed
-✅ Use Priority to focus on important tasks
-✅ Set deadlines so team knows timeline
+### Update Name
+1. Go to Profile
+2. Edit your name
+3. Click "Save"
+4. Avatar updates with new initial!
+
+---
+
+## AI Summary
+
+The Dashboard shows an AI-powered summary:
+
+- **Task Counts** - Total, To Do, In Progress, Done
+- **Completion Rate** - Visual progress bar
+- **Smart Suggestion** - AI tip based on your tasks
+- **High Priority List** - Tasks needing attention
+
+Click "Refresh" to get updated summary.
+
+---
+
+## Real-time Features
+
+TeamSync updates in real-time:
+
+- Add someone to team → They get instant notification
+- No page refresh needed
+- All team members stay in sync
+
+---
+
+## Tips for Best Use
+
+- Create teams first, then projects, then tasks
+- Use High priority for urgent tasks
+- Check AI Summary daily for productivity tips
+- Add team members by their email address
+- Move tasks across columns as you progress
+
+---
 
 ## Troubleshooting
 
 ### Can't login?
-- Check email is correct
+- Check email spelling
 - Check password is correct
-- Reset password if needed
+- Make sure you registered first
 
-### Task not updating?
+### Tasks not showing?
+- Check you selected correct project
+- Refresh the page
 - Check internet connection
-- Refresh page
-- Check WebSocket is connected
 
-### AI Breakdown not working?
-- Check description is clear
-- Try simpler description
-- Retry in a few seconds
+### Team member not receiving notification?
+- Make sure they're logged in
+- Check their email was correct
+- They should refresh their page
 
-### Can't see team member's changes?
+### AI Summary not loading?
+- Click Refresh button
 - Check internet connection
-- Refresh page
-- Check you're in right team
-
-## Need Help?
-- Check docs: [link]
-- Report bug: [GitHub issues]
-- Contact: [email]
-```
-
----
-
-## **COMPARISON TABLE**
-
-| File | For Whom | Contains |
-|------|----------|----------|
-| **README.md** | Everyone | What project is, features, how to install |
-| **DEPLOYMENT.md** | Developers | Step-by-step deploy instructions |
-| **API_DOCUMENTATION.md** | Developers | All API endpoints with examples |
-| **USER_GUIDE.md** | End Users | How to use the app (features guide) |
-| **CHALLENGES.md** | Interviewers | Problems solved during build |
-
----
-
-## **4. HUGGING FACE OR OPEN SOURCE - IS THAT OKAY?**
-
-### **✅ YES! ABSOLUTELY FINE!**
-```
-Hugging Face:
-├─ Free tier available
-├─ Multiple models
-├─ Easy to integrate
-└─ No credit card needed
-
-Open Source (Ollama):
-├─ Completely free
-├─ Runs on your computer
-├─ No API calls needed
-├─ Slower but works
-└─ Great for learning
-
-Better than OpenAI:
-├─ Save money
-├─ No API key billing
-├─ Shows you can adapt
-└─ Interview: "I found cheaper alternative!" ✅
+- Wait a few seconds and try again

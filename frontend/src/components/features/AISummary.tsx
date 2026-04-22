@@ -1,7 +1,7 @@
 /**
  * AI SUMMARY COMPONENT
  * 
- * What: Shows task insights in a card
+ * What: Shows AI-powered task insights
  * Used on: Dashboard page
  */
 
@@ -22,7 +22,7 @@ function AISummary() {
     try {
       setLoading(true);
       const tasks = await getTasks();
-      const summaryData = generateSummary(tasks);
+      const summaryData = await generateSummary(tasks);
       setSummary(summaryData);
     } catch (error) {
       toast.error('Failed to generate summary');
@@ -34,7 +34,7 @@ function AISummary() {
   if (loading) {
     return (
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="text-gray-500 text-center">Generating summary...</div>
+        <div className="text-gray-500 text-center">🤖 AI is analyzing your tasks...</div>
       </div>
     );
   }
@@ -44,11 +44,7 @@ function AISummary() {
   }
 
   return (
-
-    // <div className="bg-gradient-to-r from-slate-700 to-slate-800 rounded-lg shadow-sm p-6 text-white">
-
-   <div className="bg-gradient-to-r from-slate-700 to-slate-800 rounded-lg shadow-sm p-6 text-white">
-
+    <div className="bg-gradient-to-r from-slate-700 to-slate-800 rounded-lg shadow-sm p-6 text-white">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -57,6 +53,7 @@ function AISummary() {
         </div>
         <button
           onClick={fetchAndGenerateSummary}
+          disabled={loading}
           className="text-white/80 hover:text-white text-sm"
         >
           🔄 Refresh
@@ -97,19 +94,23 @@ function AISummary() {
         </div>
       </div>
 
-      {/* Suggestion */}
+      {/* AI Suggestion */}
       <div className="bg-white/10 rounded-lg p-3">
+        <div className="flex items-center gap-2 mb-1">
+          <span>💡</span>
+          <span className="text-sm font-medium">AI Suggestion</span>
+        </div>
         <p className="text-sm">{summary.suggestion}</p>
       </div>
 
       {/* High Priority Tasks */}
       {summary.highPriorityTasks.length > 0 && (
         <div className="mt-4">
-          <h3 className="text-sm font-medium mb-2">🔴 High Priority:</h3>
+          <h3 className="text-sm font-medium mb-2">🔴 High Priority</h3>
           <ul className="space-y-1">
-            {summary.highPriorityTasks.slice(0, 3).map((task) => (
-              <li key={task._id || task.id} className="text-sm text-white/90">
-                • {task.title}
+            {summary.highPriorityTasks.slice(0, 3).map((task, index) => (
+              <li key={index} className="text-sm text-white/90">
+                • {task}
               </li>
             ))}
           </ul>

@@ -1,130 +1,228 @@
-PROJECT NAME AND DESCRIPTION:
-TeamSync
-└─ "Real-time team collaboration with AI task breakdown"
+# TeamSync
 
+A real-time team collaboration app for managing teams, projects, and tasks with AI-powered productivity insights.
 
-# TaskForge - AI Team Collaboration Platform
+## Live Demo
 
-AI-powered task management with real-time collaboration and intelligent task breakdown.
+- **Frontend:** [https://teamsync-app.vercel.app](https://teamsync-app.vercel.app)
+- **Backend:** [https://teamsync-api.onrender.com](https://teamsync-api.onrender.com)
 
-## 🎯 Features
+(Update these links after deployment)
 
-- 🔐 **Secure Authentication** - JWT-based login/register
-- 👥 **Team Management** - Create teams, invite members, manage roles
-- 📋 **Task Management** - Create, update, delete tasks with priorities
-- 🤖 **AI Task Breakdown** - Describe task → AI breaks into subtasks automatically
-- ⚡ **Real-time Updates** - WebSocket integration for instant sync across users
-- 📊 **Activity Log** - See what your team did and when
-- 🔔 **Notifications** - Get notified of important actions
-- 🎨 **Dark/Light Mode** - Theme switching
+## Features
 
-## 🛠️ Tech Stack
+**Team Management**
+- Create and manage teams
+- Add members by email
+- Role-based access (Owner, Admin, Member)
+- Real-time notifications when added to team
 
-### Frontend
-- React 18 + TypeScript
-- Tailwind CSS for styling
-- React Router for navigation
-- Axios for API calls
-- Socket.io for real-time updates
+**Project Management**
+- Create projects under teams
+- Track project status (Planning, Active, Completed)
+- View all projects in one place
 
-### Backend
-- Node.js + Express
+**Task Management (Kanban Board)**
+- Visual Kanban board with drag-and-drop
+- Three columns: To Do, In Progress, Done
+- Priority levels: High, Medium, Low
+- Filter and organize tasks
+
+**AI-Powered Insights**
+- Smart task summary on dashboard
+- Completion rate tracking
+- Priority-based suggestions
+- Powered by Hugging Face with local fallback
+
+**Real-time Updates**
+- Socket.io integration
+- Instant notifications
+- Live updates across all users
+
+## Tech Stack
+
+**Backend**
+- Node.js
+- Express.js
+- TypeScript
 - MongoDB with Mongoose
-- JWT for authentication
-- Socket.io for WebSockets
-- Hugging Face API for AI
+- JWT Authentication
+- Socket.io
+- Hugging Face AI
 
-## 📦 Installation
+**Frontend**
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Zustand (State Management)
+- React Router
+- Axios
+
+**Testing**
+- Jest (Backend)
+- Vitest + React Testing Library (Frontend)
+- 24 tests total
+
+**Deployment**
+- Frontend: Vercel
+- Backend: Render
+- Database: MongoDB Atlas
+
+## Installation
 
 ### Prerequisites
-- Node.js (v16+)
-- MongoDB Atlas account (free)
-- Git
+- Node.js 18+
+- MongoDB Atlas account
+- Hugging Face API key (optional)
 
 ### Backend Setup
+
 ```bash
 cd backend
 npm install
-cp .env.example .env
-# Update .env with your credentials
+```
+
+Create `.env` file:
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URL=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+JWT_EXPIRES_IN=7d
+HUGGINGFACE_API_KEY=your_huggingface_key
+```
+
+Start server:
+```bash
 npm run dev
 ```
 
 ### Frontend Setup
+
 ```bash
 cd frontend
 npm install
-cp .env.example .env
-# Update VITE_API_URL=http://localhost:5000/api
+```
+
+Create `.env` file:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+Start app:
+```bash
 npm run dev
 ```
 
-## 🚀 Running Locally
+## API Endpoints
 
-Terminal 1 (Backend):
+**Auth**
+- POST /api/auth/register - Create account
+- POST /api/auth/login - Login user
+- GET /api/auth/me - Get current user
+
+**Teams**
+- GET /api/teams - Get all teams
+- POST /api/teams - Create team
+- GET /api/teams/:id - Get single team
+- PUT /api/teams/:id - Update team
+- DELETE /api/teams/:id - Delete team
+- POST /api/teams/:id/members - Add member
+
+**Projects**
+- GET /api/projects - Get all projects
+- POST /api/projects - Create project
+- GET /api/projects/:id - Get single project
+- PUT /api/projects/:id - Update project
+- DELETE /api/projects/:id - Delete project
+
+**Tasks**
+- GET /api/tasks - Get all tasks
+- POST /api/tasks - Create task
+- GET /api/tasks/:id - Get single task
+- PUT /api/tasks/:id - Update task
+- DELETE /api/tasks/:id - Delete task
+
+**AI**
+- POST /api/ai/summary - Generate task summary
+
+Full API documentation: [API_DOCS.md](./api-docs.md)
+
+## Testing
+
+**Run backend tests:**
 ```bash
 cd backend
-npm run dev
-# Server runs on http://localhost:5000
+npm test
 ```
 
-Terminal 2 (Frontend):
+**Run frontend tests:**
 ```bash
 cd frontend
-npm run dev
-# App runs on http://localhost:3000
+npm test
 ```
 
-## 📚 API Documentation
+## Project Structure
 
-See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for complete endpoint documentation.
+TEAMSYNC/
+├── backend/
+│   ├── src/
+│   │   ├── config/        # Database & Socket setup
+│   │   ├── controllers/   # Route handlers
+│   │   ├── middleware/    # Auth middleware
+│   │   ├── models/        # MongoDB schemas
+│   │   ├── routes/        # API routes
+│   │   ├── services/      # Business logic
+│   │   └── server.ts      # Entry point
+│   ├── tests/             # Jest tests
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/    # Reusable components
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API calls
+│   │   ├── store/         # Zustand store
+│   │   ├── types/         # TypeScript types
+│   │   └── App.tsx        # Main app
+│   ├── tests/             # Vitest tests
+│   └── package.json
+│
+├── api-docs.md            # API documentation
+├── challenges.md          # Problems & solutions
+├── tools.md               # Tech stack details
+├── user-guide.md          # User manual
+└── README.md              # This file
 
-## 🚢 Deployment
+## Screenshots
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for step-by-step deployment guide.
+(Add screenshots after deployment)
 
-## 📊 Database Models
+## Challenges Faced
 
-- **User** - Email, password, name, role
-- **Team** - Name, owner, members
-- **Project** - Name, team reference, members
-- **Task** - Title, status, priority, assigned user
-- **Activity** - User action logs
-- **Notification** - User notifications
+Key problems solved during development:
 
-## 🧪 Testing
-```bash
-# Backend tests
-cd backend && npm test
+1. **MongoDB DNS Issue** - ISP blocking SRV lookups, fixed with Google DNS
+2. **Data Inconsistency** - MongoDB _id vs id, used fallback pattern
+3. **Socket.io Rooms** - Users not receiving events, implemented room joining
+4. **External API Fallback** - Hugging Face unreliable, built smart local fallback
+5. **CORS Errors** - Cross-origin blocking, configured CORS middleware
+6. **JWT Expiry** - Silent auth failures, added Axios interceptors
 
-# Frontend tests
-cd frontend && npm test
-```
+Full details: [CHALLENGES.md](./challenges.md)
 
-## 📝 Challenges & Solutions
+## Future Improvements
 
-See [CHALLENGES_AND_SOLUTIONS.md](./CHALLENGES_AND_SOLUTIONS.md) for technical challenges and how I solved them.
+- Drag-and-drop for Kanban board
+- Task due date reminders
+- File attachments
+- Team chat feature
+- Mobile app (React Native)
+- Refresh token rotation
+- Two-factor authentication
 
-## 🎓 What I Learned
+## Author
 
-- Full-stack development (React + Node.js)
-- Real-time applications with WebSockets
-- RESTful API design
-- Database modeling with MongoDB
-- JWT authentication
-- Integration with AI APIs
-- Testing and debugging
-
-## 📍 Live Demo
-
-- **Frontend**: https://your-app.vercel.app
-- **Backend**: https://your-backend.onrender.com
-- **API Docs**: https://your-backend.onrender.com/api
-
-## 👨‍💻 Author
-
-Your Name - [GitHub Profile](https://github.com/your-username)
-
-## 📄 License
-
-MIT License - feel free to use!
+**Bhagyashree**
+- GitHub: [@bshree11](https://github.com/bshree11)
