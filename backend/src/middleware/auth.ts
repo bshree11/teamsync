@@ -18,7 +18,7 @@ export interface AuthRequest extends Request {
  * PROTECT MIDDLEWARE
  */
 export const protect = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): void => {
@@ -49,7 +49,7 @@ export const protect = (
   }
   
   // Step 4: Attach user info to request
-  req.user = {
+  (req as AuthRequest).user = {
     userId: decoded.userId,
     email: decoded.email,
   };
