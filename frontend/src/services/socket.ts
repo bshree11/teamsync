@@ -13,12 +13,12 @@ let socket: Socket | null = null;
 // Connect to socket server
 export const connectSocket = (userId: string) => {
   if (socket?.connected) {
-    console.log('Socket already connected');
     return socket;
   }
 
-  const SOCKET_URL = 'http://localhost:5000';
-  
+  const SOCKET_URL = import.meta.env.PROD 
+    ? 'https://teamsync-api-omo6.onrender.com' 
+    : 'http://localhost:5000';
   
   socket = io(SOCKET_URL, {
     transports: ['websocket', 'polling'],
@@ -27,7 +27,6 @@ export const connectSocket = (userId: string) => {
   socket.on('connect', () => {
     socket?.emit('join', userId);
   });
-
 
   socket.on('team_invite', (data: { message: string; teamId: string; teamName: string }) => {
     toast.success(`🎉 ${data.message} - ${data.teamName}`, {
