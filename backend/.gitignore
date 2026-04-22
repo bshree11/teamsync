@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+*.log
+coverage/
+.DS_store
+ALL INFO RELATED TO THIS PROJECT/
