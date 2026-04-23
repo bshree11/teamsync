@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProjects } from '../services/projectService';
+import { getProjects, deleteProject } from '../services/projectService';
 import type { Project } from '../types';
 import toast from 'react-hot-toast';
 import CreateProjectModal from '../components/features/CreateProjectModal';
@@ -23,6 +23,23 @@ function Projects() {
       toast.error('Failed to load projects');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (e: React.MouseEvent, projectId: string) => {
+    e.preventDefault(); // Prevent Link navigation
+    e.stopPropagation();
+    
+    if (!confirm('Are you sure you want to delete this project?')) {
+      return;
+    }
+
+    try {
+      await deleteProject(projectId);
+      setProjects(projects.filter(p => p.id !== projectId));
+      toast.success('Project deleted!');
+    } catch (error) {
+      toast.error('Failed to delete project');
     }
   };
 
@@ -75,26 +92,34 @@ function Projects() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((project) => (
-            <Link
-              key={project.id}
-              to={`/projects/${project.id}`}
-              className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 font-bold mb-3">
-                {project.name.charAt(0).toUpperCase()}
-              </div>
-
-              <h3 className="font-medium text-gray-800">{project.name}</h3>
-              <p className="text-gray-500 text-sm mt-1">
-                {project.description || 'No description'}
-              </p>
-
-              <div className="mt-3">
-                <span className={`text-xs px-2 py-1 rounded ${getStatusColor(project.status)}`}>
-                  {project.status}
-                </span>
-              </div>
-            </Link>
+            <div key={project.id} className="relative">
+              <Link
+                to={`/projects/${project.id}`}
+                className="block bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 font-bold mb-3">
+                  {project.name.charAt(0).toUpperCase()}
+                </div>
+                <h3 className="font-medium text-gray-800">{project.name}</h3>
+                <p className="text-gray-500 text-sm mt-1">
+                  {project.description || 'No description'}
+                </p>
+                <div className="mt-3">
+                  <span className={`text-xs px-2 py-1 rounded ${getStatusColor(project.status)}`}>
+                    {project.status}
+                  </span>
+                </div>
+              </Link>
+              
+              {/* Delete Button */}
+              <button
+                onClick={(e) => handleDelete(e, project.id)}
+                className="absolute top-2 right-2 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                title="Delete project"
+              >
+                🗑️
+              </button>
+            </div>
           ))}
         </div>
       )}

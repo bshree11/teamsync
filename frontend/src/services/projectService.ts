@@ -57,10 +57,10 @@
     return response.data.project;
  };
 
- //DELETE PROJECT
- export const deleteProject = async (id: string): Promise<void> =>{
-    await api.delete(`/projects/${id}`);
- };
+ // DELETE PROJECT
+export const deleteProject = async (id: string): Promise<void> => {
+  await api.delete(`/projects/${id}`);
+};
 
 
 
