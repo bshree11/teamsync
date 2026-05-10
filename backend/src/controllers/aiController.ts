@@ -10,7 +10,7 @@ export const generateSummary = async (req: Request, res: Response) => {
     if (!tasks || !Array.isArray(tasks)) {
       return res.status(400).json({
         success: false,
-        error: 'Tasks array is required'
+        error: 'Tasks array is required', 
       });
     }
 
